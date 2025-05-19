@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Notas</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gestión de Notas</h1>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="materias.html">Materias</a></li>
+            <li><a href="estudiantes.html">Estudiantes</a></li>
+            <li><a href="notas.html">Notas</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section id="seleccion-materia-estudiante">
+            <h2>Seleccionar Materia y Estudiante</h2>
+            <form id="form-seleccion">
+                <div>
+                    <label for="materia">Materia:</label>
+                    <select id="materia" required>
+                        <option value="">Seleccione una materia</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="estudiante">Estudiante:</label>
+                    <select id="estudiante" required>
+                        <option value="">Seleccione un estudiante</option>
+                    </select>
+                </div>
+                <button type="submit">Cargar Notas</button>
+            </form>
+        </section>
+        
+        <section id="crear-nota" style="display: none;">
+            <h2>Registrar Nueva Nota</h2>
+            <form id="form-nota">
+                <div>
+                    <label for="valor">Valor (0.0 - 5.0):</label>
+                    <input type="number" id="valor" min="0" max="5" step="0.01" required>
+                </div>
+                <div>
+                    <label for="porcentaje">Porcentaje:</label>
+                    <input type="number" id="porcentaje" min="1" max="100" required>
+                </div>
+                <div>
+                    <label for="observacion">Observación:</label>
+                    <input type="text" id="observacion">
+                </div>
+                <button type="submit">Guardar Nota</button>
+            </form>
+        </section>
+        
+        <section id="lista-notas" style="display: none;">
+            <h2>Notas Registradas</h2>
+            <div id="promedio-container">
+                <strong>Promedio Ponderado: </strong>
+                <span id="promedio">0.0</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Valor</th>
+                        <th>Porcentaje</th>
+                        <th>Observación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="notas-table-body">
+                    <!-- Las notas se cargarán aquí con JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    
+    <footer>
+        <p>Taller de Programación Reactiva - 2025</p>
+    </footer>
+    
+    <script src="js/api.js"></script>
+    <script src="js/notas.js"></script>
+</body>
+</html>

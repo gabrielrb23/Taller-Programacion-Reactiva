@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Materias</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gestión de Materias</h1>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="materias.html">Materias</a></li>
+            <li><a href="estudiantes.html">Estudiantes</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section id="crear-materia">
+            <h2>Crear Nueva Materia</h2>
+            <form id="form-materia">
+                <div>
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" required>
+                </div>
+                <div>
+                    <label for="creditos">Créditos:</label>
+                    <input type="number" id="creditos" min="1" required>
+                </div>
+                <button type="submit">Guardar Materia</button>
+            </form>
+        </section>
+        
+        <section id="lista-materias">
+            <h2>Lista de Materias</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Créditos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="materias-table-body">
+                    <!-- Las materias se cargarán aquí con JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    
+    <footer>
+        <p>Taller de Programación Reactiva - 2025</p>
+    </footer>
+    
+    <script src="js/api.js"></script>
+    <script src="js/materias.js"></script>
+</body>
+</html>
