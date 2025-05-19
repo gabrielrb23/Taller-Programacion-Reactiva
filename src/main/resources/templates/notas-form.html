@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${modo == 'crear' ? 'Crear Nueva Nota' : 'Editar Nota'}">Formulario Nota</title>
+    <link rel="stylesheet" href="/css/estilos.css" />
+</head>
+<body>
+    <h1 th:text="${modo == 'crear' ? 'Crear Nueva Nota' : 'Editar Nota'}">Formulario Nota</h1>
+
+    <form th:action="@{/notas/guardar}" th:object="${nota}" method="post">
+        <table>
+            <tbody>
+                <tr th:if="${modo == 'editar'}">
+                    <td colspan="2">
+                        <input type="hidden" th:field="*{id}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="observacion">Observación:</label></td>
+                    <td>
+                        <input type="text" id="observacion" th:field="*{observacion}" required />
+                        <div class="error" th:if="${#fields.hasErrors('observacion')}" th:errors="*{observacion}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="valor">Valor:</label></td>
+                    <td>
+                        <input type="number" id="valor" step="0.1" min="0" max="5" th:field="*{valor}" required />
+                        <div class="error" th:if="${#fields.hasErrors('valor')}" th:errors="*{valor}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="porcentaje">Porcentaje:</label></td>
+                    <td>
+                        <input type="number" id="porcentaje" step="0.1" min="0" max="100" th:field="*{porcentaje}" required />
+                        <div class="error" th:if="${#fields.hasErrors('porcentaje')}" th:errors="*{porcentaje}"></div>
+                    </td>
+                </tr>
+
+                <tr style="display:none;">
+                    <td colspan="2">
+                        <input type="hidden" th:field="*{materiaId}" />
+                        <input type="hidden" th:field="*{estudianteId}" />
+                    </td>
+                </tr>
+
+                <div th:if="${error}" class="error">
+                    <p th:text="${error}"></p>
+                </div>
+
+
+                <tr>
+                    <td colspan="2">
+                        <button type="submit" >
+                            <span th:text="${modo == 'crear' ? 'Crear' : 'Guardar Cambios'}">Guardar</span>
+                        </button>
+                        <a th:href="@{'/notas/' + ${nota.estudianteId} + '?materiaId=' + ${nota.materiaId}}" style="margin-left: 10px;">Cancelar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</body>
+</html>

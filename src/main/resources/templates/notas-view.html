@@ -3,31 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Notas del Estudiante</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
     <h1>Notas del Estudiante</h1>
 
-    <table>
+    <div class="enlaces">
+        <a th:href="@{/materias/view}">Volver a Materias</a>
+        <a th:href="@{'/notas/nuevo?estudianteId=' + ${estudianteId} + '&materiaId=' + ${materiaId}}">Agregar Nota</a>
+    </div>
+    <div th:if="${notas.empty}">
+        <p>No hay notas registradas para este estudiante en esta materia.</p>
+    </div>
+    <p>Promedio: <span th:text="${promedio}">0.0</span></p>
+
+    <table th:unless="${notas.empty}">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Materia ID</th>
-                <th>Nota</th>
+                <th>Observación</th>
+                <th>Valor</th>
                 <th>Porcentaje</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="nota : ${notas}">
-                <td th:text="${nota.id}">1</td>
-                <td th:text="${nota.materiaId}">101</td>
-                <td th:text="${nota.valor}">4.5</td>
-                <td th:text="${nota.porcentaje}">30</td>
+                <td th:text="${nota.observacion}">Observación</td>
+                <td th:text="${nota.valor}">0.0</td>
+                <td th:text="${nota.porcentaje}">0</td>
+                <td>
+                    <a th:href="@{'/notas/editar?id=' + ${nota.id}}">Editar</a>
+                    <a th:href="@{'/notas/eliminar'(id=${nota.id}, estudianteId=${nota.estudianteId}, materiaId=${nota.materiaId})}"
+                        onclick="return confirm('¿Eliminar esta nota?')">Eliminar</a>
+                </td>
             </tr>
         </tbody>
     </table>
-
-    <br>
-    <a th:href="@{/estudiantes/view}">Volver a Lista de Estudiantes</a>
 </body>
 </html>

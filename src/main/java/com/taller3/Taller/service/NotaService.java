@@ -14,24 +14,29 @@ public class NotaService {
     private final NotaRepository notaRepository;
 
     public Mono<Nota> saveNota(Nota nota) {
-        // Validar rango de la nota (0.0 - 5.0)
         if (nota.getValor() < 0.0 || nota.getValor() > 5.0) {
             return Mono.error(new RuntimeException("La nota debe estar entre 0.0 y 5.0"));
         }
-        
-        // Validar porcentaje positivo
-        if (nota.getPorcentaje() <= 0.0) {
-            return Mono.error(new RuntimeException("El porcentaje debe ser mayor a 0"));
+        if (nota.getPorcentaje() <= 0.0 || nota.getPorcentaje() > 100.0) {
+            return Mono.error(new RuntimeException("El porcentaje debe estar entre 0 y 100"));
         }
 
-        return notaRepository.sumPorcentajesByMateriaAndEstudiante(nota.getMateriaId(), nota.getEstudianteId())
-            .flatMap(totalPorcentaje -> {
-                double nuevoTotal = totalPorcentaje != null ? totalPorcentaje + nota.getPorcentaje() : nota.getPorcentaje();
-                if (nuevoTotal > 100.0) {
-                    return Mono.error(new RuntimeException("La suma de porcentajes supera el 100%"));
-                }
-                return notaRepository.save(nota);
-            });
+        Mono<Double> sumaPorcentajesMono;
+        if (nota.getId() != null) {
+            sumaPorcentajesMono = notaRepository.calcularPorcentaje(
+                nota.getMateriaId(), nota.getEstudianteId(), nota.getId());
+        } else {
+            sumaPorcentajesMono = notaRepository.sumPorcentajesByMateriaAndEstudiante(
+                nota.getMateriaId(), nota.getEstudianteId());
+        }
+
+        return sumaPorcentajesMono.flatMap(totalPorcentaje -> {
+            double nuevoTotal = (totalPorcentaje != null ? totalPorcentaje : 0.0) + nota.getPorcentaje();
+            if (nuevoTotal > 100.0) {
+                return Mono.error(new RuntimeException("La suma de porcentajes supera el 100%"));
+            }
+            return notaRepository.save(nota);
+        });
     }
 
     public Mono<Double> calcularPromedio(Long estudianteId, Long materiaId) {
@@ -48,16 +53,24 @@ public class NotaService {
                     sumaPorcentajes += nota.getPorcentaje();
                 }
                 
-                // Validar que los porcentajes sumen exactamente 100%
-                if (Math.abs(sumaPorcentajes - 100.0) > 0.01) {
-                    throw new RuntimeException("Los porcentajes no suman 100%");
-                }
-                
                 return sumaPonderada;
             });
     }
 
-    public Flux<Nota> findByEstudianteId(Long estudianteId) {
-        return notaRepository.findByEstudianteId(estudianteId);
+    public Flux<Nota> findByMateriaIdAndEstudianteId(Long materiaId, Long estudianteId) {
+        return notaRepository.findByMateriaIdAndEstudianteId(materiaId, estudianteId);
     }
+
+    public Mono<Void> deleteByMateriaIdAndEstudianteId(Long materiaId, Long estudianteId) {
+        return notaRepository.deleteByMateriaIdAndEstudianteId(materiaId, estudianteId);
+    }
+
+    public Mono<Void> deleteById(Long id) {
+        return notaRepository.deleteById(id);
+    }
+
+    public Mono<Nota> findById(Long id) {
+        return notaRepository.findById(id);
+    }
+    
 }
