@@ -26,6 +26,19 @@ public class EstudianteController {
             );
     }
 
+    @GetMapping("/estudiantes/nuevo")
+    public Mono<Rendering> mostrarFormularioNuevoEstudiante() {
+        return Mono.just(Rendering.view("nuevo-estudiante")
+            .modelAttribute("estudiante", new Estudiante())
+            .build());
+    }
+
+    @PostMapping("/estudiantes/guardar")
+    public Mono<Rendering> guardarEstudiante(@ModelAttribute Estudiante estudiante) {
+        return estudianteService.save(estudiante)
+            .then(Mono.just(Rendering.redirectTo("/estudiantes/view").build()));
+    }
+
     @GetMapping("/estudiantes/editar/{id}")
     public Mono<Rendering> editarEstudiante(@PathVariable Long id) {
         return estudianteService.findById(id)
@@ -37,6 +50,12 @@ public class EstudianteController {
     @PostMapping("/estudiantes/actualizar")
     public Mono<Rendering> actualizarEstudiante(@ModelAttribute Estudiante estudiante) {
         return estudianteService.save(estudiante)
+            .then(Mono.just(Rendering.redirectTo("/estudiantes/view").build()));
+    }
+
+    @GetMapping("/estudiantes/eliminar/{id}")
+    public Mono<Rendering> eliminarEstudiante(@PathVariable Long id) {
+        return estudianteService.deleteById(id)
             .then(Mono.just(Rendering.redirectTo("/estudiantes/view").build()));
     }
 }

@@ -36,4 +36,8 @@ public class EstudianteService {
     public Mono<Void> deleteById(Long id) {
         return estudianteRepository.deleteById(id);
     }
+
+    public Flux<Estudiante> findByMateriaId(Long materiaId) {
+        return estudianteRepository.findByMateriaId(materiaId);
+    }
 }

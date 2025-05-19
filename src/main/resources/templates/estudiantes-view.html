@@ -7,6 +7,9 @@
 </head>
 <body>
     <h1>Lista de Estudiantes</h1>
+    <div>
+        <a th:href="@{/estudiantes/nuevo}" class="btn-crear">Crear Nuevo Estudiante</a>
+    </div>
     <table>
         <thead>
             <tr>
@@ -25,7 +28,8 @@
                 <td th:text="${estudiante.correo}">correo@example.com</td>
                 <td>
                     <a th:href="@{'/estudiantes/editar/' + ${estudiante.id}}">Editar</a> |
-                    <a th:href="@{'/estudiantes/eliminar/' + ${estudiante.id}}">Eliminar</a> |
+                    <a th:href="@{'/estudiantes/eliminar/' + ${estudiante.id}}" 
+                       onclick="return confirm('¿Estás seguro de que quieres eliminar este estudiante?');">Eliminar</a> |
                     <a th:href="@{'/notas/' + ${estudiante.id}}">Ver Notas</a>
                 </td>
             </tr>
