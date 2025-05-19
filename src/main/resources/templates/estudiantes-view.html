@@ -10,7 +10,7 @@
     
     <div class="enlaces">
         <a th:href="@{/materias/view}">Volver a Materias</a>
-        <a th:href="@{/estudiantes/nuevo}">Crear Nuevo Estudiante</a>
+        <a th:href="@{'/estudiantes/nuevo?materiaId=' + ${materiaId}}">Crear Nuevo Estudiante</a>
     </div>
     <div th:if="${estudiantes.empty}">
         <p>No hay estudiantes inscritos en esta materia aún.</p>
@@ -32,10 +32,10 @@
                 <td th:text="${estudiante.apellido}">Apellido</td>
                 <td th:text="${estudiante.correo}">correo@example.com</td>
                 <td>
-                    <a th:href="@{'/estudiantes/editar/' + ${estudiante.id}}">Editar</a> |
+                    <a th:href="@{'/estudiantes/editar/' + ${estudiante.id} + '?materiaId=' + ${materiaId}}">Editar</a>
                     <a th:href="@{'/estudiantes/eliminar/' + ${estudiante.id}}" 
                        onclick="return confirm('¿Estás seguro de que quieres eliminar este estudiante?');">Eliminar</a> |
-                    <a th:href="@{'/notas/' + ${estudiante.id} + '?materiaId=' + ${materiaId}}">Ver Notas</a>
+                    <a th:href="@{|/notas/${estudiante.id}?materiaId=${materiaId}|}">Ver Notas</a>
                 </td>
             </tr>
         </tbody>

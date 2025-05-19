@@ -19,10 +19,17 @@ public class NotaController {
         this.notaService = notaService;
     }
 
-    @GetMapping("/notas/{estudianteId}")
-    public Mono<Rendering> verNotas(@PathVariable Long estudianteId,
-                                @RequestParam Long materiaId) {
-        Mono<List<Nota>> notasMono = notaService.findByMateriaIdAndEstudianteId(materiaId, estudianteId)
+@GetMapping("/notas/{estudianteId}")
+public Mono<Rendering> verNotas(
+    @PathVariable Long estudianteId,
+    @RequestParam(required = false) Long materiaId) {
+    
+    if (materiaId == null) {
+        return Mono.just(Rendering.view("error")
+            .modelAttribute("mensaje", "ID de materia no proporcionado")
+            .build());
+    }
+            Mono<List<Nota>> notasMono = notaService.findByMateriaIdAndEstudianteId(materiaId, estudianteId)
                 .collectList();
 
         Mono<Double> promedioMono = notaService.calcularPromedio(estudianteId, materiaId)

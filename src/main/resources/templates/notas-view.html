@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Notas del Estudiante</title>
+    <title>Notas del Estudiante </title>
     <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
     <h1>Notas del Estudiante</h1>
 
-    <div class="enlaces">
+    <div class="enlaces"
         <a th:href="@{/materias/view}">Volver a Materias</a>
         <a th:href="@{'/notas/nuevo?estudianteId=' + ${estudianteId} + '&materiaId=' + ${materiaId}}">Agregar Nota</a>
     </div>
