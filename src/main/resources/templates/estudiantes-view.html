@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <title>Lista de Estudiantes</title>
     <link rel="stylesheet" th:href="@{/css/estilos.css}">
-    </style>
 </head>
 <body>
     <h1>Lista de Estudiantes</h1>
@@ -15,6 +14,7 @@
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Correo</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -23,6 +23,11 @@
                 <td th:text="${estudiante.nombre}">Nombre</td>
                 <td th:text="${estudiante.apellido}">Apellido</td>
                 <td th:text="${estudiante.correo}">correo@example.com</td>
+                <td>
+                    <a th:href="@{'/estudiantes/editar/' + ${estudiante.id}}">Editar</a> |
+                    <a th:href="@{'/estudiantes/eliminar/' + ${estudiante.id}}">Eliminar</a> |
+                    <a th:href="@{'/notas/' + ${estudiante.id}}">Ver Notas</a>
+                </td>
             </tr>
         </tbody>
     </table>

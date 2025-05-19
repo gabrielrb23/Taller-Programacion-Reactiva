@@ -4,6 +4,8 @@ import com.taller3.Taller.model.Nota;
 import com.taller3.Taller.repository.NotaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -53,5 +55,9 @@ public class NotaService {
                 
                 return sumaPonderada;
             });
+    }
+
+    public Flux<Nota> findByEstudianteId(Long estudianteId) {
+        return notaRepository.findByEstudianteId(estudianteId);
     }
 }

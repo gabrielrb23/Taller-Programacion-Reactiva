@@ -1,10 +1,10 @@
 package com.taller3.Taller.controller;
 
+import com.taller3.Taller.model.Estudiante;
 import com.taller3.Taller.service.EstudianteService;
 import reactor.core.publisher.Mono;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
-import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -26,4 +26,17 @@ public class EstudianteController {
             );
     }
 
+    @GetMapping("/estudiantes/editar/{id}")
+    public Mono<Rendering> editarEstudiante(@PathVariable Long id) {
+        return estudianteService.findById(id)
+            .map(est -> Rendering.view("editar-estudiante")
+                .modelAttribute("estudiante", est)
+                .build());
+    }
+
+    @PostMapping("/estudiantes/actualizar")
+    public Mono<Rendering> actualizarEstudiante(@ModelAttribute Estudiante estudiante) {
+        return estudianteService.save(estudiante)
+            .then(Mono.just(Rendering.redirectTo("/estudiantes/view").build()));
+    }
 }
