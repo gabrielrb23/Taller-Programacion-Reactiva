@@ -14,7 +14,7 @@
                 <tr>
                     <td><label for="nombre">Nombre:</label></td>
                     <td><input type="text" id="nombre" th:field="*{nombre}" required /></td>
-                </tr>
+            </tr>
                 <tr>
                     <td><label for="apellido">Apellido:</label></td>
                     <td><input type="text" id="apellido" th:field="*{apellido}" required /></td>
@@ -28,10 +28,10 @@
                         <input type="hidden" th:field="*{id}" />
                         <button type="submit">Guardar Cambios</button>
                         <a th:href="@{/estudiantes/view}" style="margin-left: 10px;">Cancelar</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     </form>
 </body>
 </html>
