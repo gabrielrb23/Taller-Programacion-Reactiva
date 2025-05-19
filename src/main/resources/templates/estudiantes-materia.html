@@ -2,35 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Estudiantes en <span th:text="${materia.nombre}">Materia</span></title>
+    <title>Estudiantes en Materia</title>
     <link rel="stylesheet" href="/css/estilos.css">
+    <style>
+        .nota-column {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Estudiantes en <span th:text="${materia.nombre}"></span></h1>
-    
-    <div th:if="${estudiantes == null or estudiantes.empty}">
-        <p>No hay estudiantes inscritos en esta materia</p>
+    <h1>Estudiantes en Materia</h1>
+    <div class="enlaces">
+        <a th:href="@{/materias/view}">Volver a Materias</a>
+        <a th:href="@{'/materias/' + ${materiaId} + '/estudiantes/nuevo'}" class="btn-crear">Crear Nuevo Estudiante</a>
     </div>
-    
-    <div th:unless="${estudiantes == null or estudiantes.empty}">
-        <table>
+    <div th:if="${estudiantes.empty}">
+        <p>No hay estudiantes inscritos en esta materia aún.</p>
+    </div>
+        <table th:unless="${estudiantes.empty}">
             <thead>
                 <tr>
-                    <th>Estudiante</th>
-                    <th>Nota</th>
-                    <th>Porcentaje</th>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="item : ${estudiantes}">
-                    <td th:text="${item.estudiante.nombre + ' ' + item.estudiante.apellido}"></td>
-                    <td th:text="${item.nota.valor}"></td>
-                    <td th:text="${item.nota.porcentaje}"></td>
+                <tr th:each="estudiante : ${estudiantes}">
+                    <td th:text="${estudiante.id}">1</td>
+                    <td th:text="${estudiante.nombre}">Nombre</td>
+                    <td th:text="${estudiante.apellido}">Apellido</td>
+                    <td th:text="${estudiante.correo}">correo@example.com</td>
+                    <td>
+                        <a th:href="@{'/estudiantes/editar/' + ${estudiante.id}}">Editar</a> |
+                        <a th:href="@{'/estudiantes/eliminar/' + ${estudiante.id}}" 
+                        onclick="return confirm('¿Estás seguro de que quieres eliminar este estudiante?');">Eliminar</a> |
+                        <a th:href="@{'/notas/' + ${estudiante.id}}">Ver Notas</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
-    </div>
-    
-    <a th:href="@{/materias/view}">Volver a materias</a>
 </body>
 </html>

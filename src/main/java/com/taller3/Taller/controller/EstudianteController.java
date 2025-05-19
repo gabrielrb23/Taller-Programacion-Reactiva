@@ -26,17 +26,39 @@ public class EstudianteController {
             );
     }
 
-    @GetMapping("/estudiantes/nuevo")
-    public Mono<Rendering> mostrarFormularioNuevoEstudiante() {
-        return Mono.just(Rendering.view("nuevo-estudiante")
+    @GetMapping("/materias/{materiaId}/estudiantes/nuevo")
+    public Mono<Rendering> mostrarFormularioNuevoEstudianteConMateria(@PathVariable Long materiaId) {
+        return Mono.just(Rendering.view("editar-estudiante")
             .modelAttribute("estudiante", new Estudiante())
+            .modelAttribute("modo", "crear")
+            .modelAttribute("materiaId", materiaId)
             .build());
     }
 
     @PostMapping("/estudiantes/guardar")
-    public Mono<Rendering> guardarEstudiante(@ModelAttribute Estudiante estudiante) {
+    public Mono<Rendering> guardarEstudiante(
+            @ModelAttribute Estudiante estudiante,
+            @RequestParam(value = "materiaId", required = false) Long materiaId) {
+        
+        System.out.println("Materia ID recibido: " + materiaId); // Esto imprimirá en la consola
+        
         return estudianteService.save(estudiante)
-            .then(Mono.just(Rendering.redirectTo("/estudiantes/view").build()));
+            .then(Mono.defer(() -> {
+                if (materiaId != null) {
+                    return Mono.just(Rendering.redirectTo("/materias/" + materiaId + "/estudiantes").build());
+                } else {
+                    return Mono.just(Rendering.redirectTo("/estudiantes/view").build());
+                }
+            }))
+            .onErrorResume(e -> {
+                System.err.println("Error al guardar estudiante: " + e.getMessage());
+                e.printStackTrace(); // Imprime el stack trace para depuración
+                if (materiaId != null) {
+                    return Mono.just(Rendering.redirectTo("/materias/" + materiaId + "/estudiantes?error=save_error").build());
+                } else {
+                    return Mono.just(Rendering.redirectTo("/estudiantes/view?error=save_error").build());
+                }
+            });
     }
 
     @GetMapping("/estudiantes/editar/{id}")
@@ -44,13 +66,25 @@ public class EstudianteController {
         return estudianteService.findById(id)
             .map(est -> Rendering.view("editar-estudiante")
                 .modelAttribute("estudiante", est)
+                .modelAttribute("modo", "editar")
                 .build());
     }
 
     @PostMapping("/estudiantes/actualizar")
-    public Mono<Rendering> actualizarEstudiante(@ModelAttribute Estudiante estudiante) {
+    public Mono<Rendering> actualizarEstudiante(
+            @ModelAttribute Estudiante estudiante,
+            @RequestParam(value = "materiaId", required = false) Long materiaId) {
+        
         return estudianteService.save(estudiante)
-            .then(Mono.just(Rendering.redirectTo("/estudiantes/view").build()));
+            .then(Mono.defer(() -> {
+                if (materiaId != null) {
+                    // Si hay una materiaId, redirige a la lista de estudiantes de esa materia
+                    return Mono.just(Rendering.redirectTo("/materias/" + materiaId + "/estudiantes").build());
+                } else {
+                    // Si no hay materiaId, usa el comportamiento anterior
+                    return Mono.just(Rendering.redirectTo("/estudiantes/view").build());
+                }
+            }));
     }
 
     @GetMapping("/estudiantes/eliminar/{id}")
@@ -58,4 +92,6 @@ public class EstudianteController {
         return estudianteService.deleteById(id)
             .then(Mono.just(Rendering.redirectTo("/estudiantes/view").build()));
     }
+
+    
 }

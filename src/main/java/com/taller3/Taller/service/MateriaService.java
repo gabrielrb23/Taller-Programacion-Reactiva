@@ -17,6 +17,17 @@ public class MateriaService {
     }
 
     public Mono<Materia> findById(Long id) {
-        return materiaRepository.findById(id);
+        return materiaRepository.findById(id)
+                .switchIfEmpty(Mono.error(new RuntimeException("Materia no encontrada con ID: " + id)));
+    }
+
+    public Mono<Materia> save(Materia materia) {
+        return materiaRepository.save(materia);
+    }
+
+    public Mono<Void> deleteById(Long id) {
+        return materiaRepository.findById(id)
+                .flatMap(materia -> materiaRepository.deleteById(id))
+                .switchIfEmpty(Mono.error(new RuntimeException("No se pudo eliminar, materia no encontrada con ID: " + id)));
     }
 }

@@ -2,36 +2,52 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Estudiante</title>
+    <title>Estudiantes de la Materia</title>
     <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
-    <h1>Editar Estudiante</h1>
+    <h1>Estudiantes de <span th:text="${materia.nombre}">Materia</span></h1>
     
-    <form th:action="@{'/estudiantes/actualizar'}" th:object="${estudiante}" method="post">
-        <table>
-            <tbody>
-                <tr>
-                    <td><label for="nombre">Nombre:</label></td>
-                    <td><input type="text" id="nombre" th:field="*{nombre}" required /></td>
-                </tr>
-                <tr>
-                    <td><label for="apellido">Apellido:</label></td>
-                    <td><input type="text" id="apellido" th:field="*{apellido}" required /></td>
-                </tr>
-                <tr>
-                    <td><label for="correo">Correo:</label></td>
-                    <td><input type="email" id="correo" th:field="*{correo}" required /></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <input type="hidden" th:field="*{id}" />
-                        <button type="submit">Guardar Cambios</button>
-                        <a th:href="@{/estudiantes/view}" style="margin-left: 10px;">Cancelar</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
+    <div th:if="${param.error}" class="alert alert-danger">
+        Error al procesar la solicitud.
+    </div>
+    
+    <div th:if="${param.success}" class="alert alert-success">
+        Operación completada con éxito.
+    </div>
+    
+    <a th:href="@{'/materias/' + ${materiaId} + '/estudiantes/nuevo'}" class="btn btn-primary">Nuevo Estudiante</a>
+    <a th:href="@{/materias/view}" class="btn btn-secondary">Volver a Materias</a>
+    
+    <table class="table" th:if="${!estudiantes.empty}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="estudiante : ${estudiantes}">
+                <td th:text="${estudiante.id}">1</td>
+                <td th:text="${estudiante.nombre}">Nombre</td>
+                <td th:text="${estudiante.apellido}">Apellido</td>
+                <td th:text="${estudiante.correo}">correo@example.com</td>
+                <td>
+                    <a th:href="@{'/estudiantes/editar/' + ${estudiante.id} + '?materiaId=' + ${materiaId}}" 
+                       class="btn btn-sm btn-warning">Editar</a>
+                    <a th:href="@{'/estudiantes/eliminar/' + ${estudiante.id} + '?materiaId=' + ${materiaId}}" 
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('¿Está seguro de eliminar este estudiante?')">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div th:if="${estudiantes.empty}">
+        <p>No hay estudiantes registrados para esta materia.</p>
+    </div>
 </body>
 </html>

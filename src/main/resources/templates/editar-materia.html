@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${modo == 'crear' ? 'Crear Nueva Materia' : 'Editar Materia'}">Formulario Materia</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+    <h1 th:text="${modo == 'crear' ? 'Crear Nueva Materia' : 'Editar Materia'}">Formulario Materia</h1>
+    
+    <form th:action="${modo == 'crear' ? '/materias/guardar' : '/materias/guardar'}" 
+          th:object="${materia}" method="post">
+        
+        <input type="hidden" th:field="*{id}" th:if="${modo == 'editar'}">
+        
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required>
+            <small class="text-danger" th:if="${#fields.hasErrors('nombre')}" 
+                   th:errors="*{nombre}">Error en nombre</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="creditos">Créditos:</label>
+            <input type="number" id="creditos" th:field="*{creditos}" class="form-control" min="1" required>
+            <small class="text-danger" th:if="${#fields.hasErrors('creditos')}" 
+                   th:errors="*{creditos}">Error en créditos</small>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <span th:text="${modo == 'crear' ? 'Crear' : 'Guardar Cambios'}">Guardar</span>
+            </button>
+            <a th:href="@{/materias/view}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</body>
+</html>
