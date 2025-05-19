@@ -7,6 +7,10 @@
 </head>
 <body>
     <h1>Lista de Materias</h1>
+    <div>
+        <a th:href="@{/materias/nuevo}" class="btn-crear">Crear Nueva Materia</a>
+    </div>
+    
     <table>
         <thead>
             <tr>
@@ -22,6 +26,9 @@
                 <td th:text="${materia.nombre}"></td>
                 <td th:text="${materia.creditos}"></td>
                 <td>
+                    <a th:href="@{'/materias/editar/' + ${materia.id}}">Editar</a> |
+                    <a th:href="@{'/materias/eliminar/' + ${materia.id}}" 
+                       onclick="return confirm('¿Estás seguro de que quieres eliminar esta materia?');">Eliminar</a> |
                     <a th:href="@{'/materias/' + ${materia.id} + '/estudiantes'}">Ver Estudiantes</a>
                 </td>
             </tr>

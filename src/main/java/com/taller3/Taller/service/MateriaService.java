@@ -16,6 +16,14 @@ public class MateriaService {
         return materiaRepository.findAll();
     }
 
+    public Mono<Materia> save(Materia materia) {
+        return materiaRepository.save(materia);
+    }
+
+    public Mono<Void> deleteById(Long id) {
+        return materiaRepository.deleteById(id);
+    }
+
     public Mono<Materia> findById(Long id) {
         return materiaRepository.findById(id);
     }

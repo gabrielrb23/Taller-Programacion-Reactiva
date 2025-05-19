@@ -2,19 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Estudiantes</title>
+    <title>Estudiantes de la Materia</title>
     <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
-    <h1>Lista de Estudiantes</h1>
-    <div th:if="${materiaId != null}">
-        <a th:href="@{/materias}">Volver a Materias</a>
-    </div>
-    <div th:unless="${materiaId != null}">
-        <a th:href="@{/estudiantes/nuevo}" class="btn-crear">Crear Nuevo Estudiante</a>
-    </div>
+    <h1>Estudiantes inscritos en: <span th:text="${materiaNombre}"></span></h1>
     
-    <table>
+    <div class="enlaces">
+        <a th:href="@{/materias/view}">Volver a Materias</a>
+        <a th:href="@{/estudiantes/nuevo}">Crear Nuevo Estudiante</a>
+    </div>
+    <div th:if="${estudiantes.empty}">
+        <p>No hay estudiantes inscritos en esta materia aún.</p>
+    </div>
+        <table th:unless="${estudiantes.empty}">
         <thead>
             <tr>
                 <th>ID</th>
@@ -34,7 +35,7 @@
                     <a th:href="@{'/estudiantes/editar/' + ${estudiante.id}}">Editar</a> |
                     <a th:href="@{'/estudiantes/eliminar/' + ${estudiante.id}}" 
                        onclick="return confirm('¿Estás seguro de que quieres eliminar este estudiante?');">Eliminar</a> |
-                    <a th:href="@{'/notas/' + ${estudiante.id}}">Ver Notas</a>
+                    <a th:href="@{'/notas/' + ${estudiante.id} + '?materiaId=' + ${materiaId}}">Ver Notas</a>
                 </td>
             </tr>
         </tbody>
