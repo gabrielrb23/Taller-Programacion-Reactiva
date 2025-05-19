@@ -27,4 +27,8 @@ public class MateriaService {
     public Mono<Materia> findById(Long id) {
         return materiaRepository.findById(id);
     }
+
+    public Mono<Materia> findByNombre(String nombre) {
+        return materiaRepository.findByNombre(nombre);
+    }
 }

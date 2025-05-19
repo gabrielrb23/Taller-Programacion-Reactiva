@@ -40,11 +40,21 @@ public class MateriaController {
 
     @PostMapping("/materias/guardar")
     public Mono<Rendering> guardarMateria(@ModelAttribute Materia materia) {
-        return materiaService.save(materia)
-            .then(Mono.just(Rendering.redirectTo("/materias/view").build()))
-            .onErrorResume(e -> Mono.just(Rendering.view("error")
-                .modelAttribute("error", "Error al guardar la materia: " + e.getMessage())
-                .build()));
+        return materiaService.findByNombre(materia.getNombre())
+            .hasElement()
+            .flatMap(existe -> {
+                if (existe) {
+                    // Si ya existe, mostramos el formulario con error
+                    return Mono.just(Rendering.view("materia-form")
+                        .modelAttribute("materia", materia)
+                        .modelAttribute("modo", "crear")
+                        .modelAttribute("error", "Ya existe una materia con este nombre")
+                        .build());
+                }
+                // Si no existe, guardamos
+                return materiaService.save(materia)
+                    .thenReturn(Rendering.redirectTo("/materias/view").build());
+            });
     }
 
     @GetMapping("/materias/editar/{id}")

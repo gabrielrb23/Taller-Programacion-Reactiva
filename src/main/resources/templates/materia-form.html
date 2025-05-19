@@ -8,6 +8,7 @@
 <body>
     <h1 th:text="${modo == 'crear' ? 'Crear Nueva Materia' : 'Editar Materia'}">Formulario Materia</h1>
 
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
     <form th:action="@{/materias/guardar}" th:object="${materia}" method="post">
         <table>
             <tbody>
