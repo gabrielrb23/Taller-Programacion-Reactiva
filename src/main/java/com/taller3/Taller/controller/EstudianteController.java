@@ -5,6 +5,8 @@ import com.taller3.Taller.service.EstudianteService;
 import reactor.core.publisher.Mono;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -33,10 +35,20 @@ public class EstudianteController {
             .build());
     }
 
-    @PostMapping("/estudiantes/guardar")
-    public Mono<Rendering> guardarEstudiante(@ModelAttribute Estudiante estudiante) {
-        return estudianteService.save(estudiante)
-            .then(Mono.just(Rendering.redirectTo("/estudiantes/view").build()));
+    @PostMapping("/estudiantes")
+    public Mono<Rendering> registrarEstudiante(@ModelAttribute Estudiante estudiante) {
+        return estudianteService.findByCorreo(estudiante.getCorreo())
+            .hasElement()
+            .flatMap(exists -> {
+                if (exists) {
+                    return Mono.just(Rendering.view("nuevo-estudiante")
+                        .modelAttribute("error", "Ya existe un estudiante con ese correo")
+                        .modelAttribute("estudiante", estudiante)
+                        .build());
+                }
+                return estudianteService.save(estudiante)
+                    .thenReturn(Rendering.redirectTo("/estudiantes/view").build());
+            });
     }
 
     @GetMapping("/estudiantes/editar/{id}")

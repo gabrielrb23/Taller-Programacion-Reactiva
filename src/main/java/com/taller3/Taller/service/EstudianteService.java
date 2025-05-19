@@ -32,6 +32,10 @@ public class EstudianteService {
             .switchIfEmpty(estudianteRepository.save(estudiante));
     }
 
+    public Mono<Estudiante> findByCorreo(String correo) {
+        return estudianteRepository.findByCorreo(correo);
+    }
+
     public Mono<Void> deleteById(Long id) {
         return estudianteRepository.deleteById(id);
     }

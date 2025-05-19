@@ -1,5 +1,6 @@
 package com.taller3.Taller.controller;
 
+import com.taller3.Taller.model.Estudiante;
 import com.taller3.Taller.model.Materia;
 import com.taller3.Taller.service.MateriaService;
 import com.taller3.Taller.service.EstudianteService;
@@ -66,22 +67,24 @@ public class MateriaController {
                 .build()));
     }
 
-    @GetMapping("/materias/{id}/estudiantes")
+   @GetMapping("/materias/{id}/estudiantes")
     public Mono<Rendering> listarEstudiantesPorMateria(@PathVariable Long id) {
         return materiaService.findById(id)
             .switchIfEmpty(Mono.error(new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Materia no encontrada")))
             .flatMap(materia -> notaRepository.findByMateriaId(id)
                 .flatMap(nota -> estudianteService.findById(nota.getEstudianteId()))
+                .distinct(Estudiante::getId)
                 .collectList()
                 .map(estudiantes -> Rendering.view("estudiantes-view")
                     .modelAttribute("estudiantes", estudiantes)
                     .modelAttribute("materiaId", id)
                     .modelAttribute("materiaNombre", materia.getNombre())
                     .build()
-            )
-            .onErrorResume(e -> Mono.just(Rendering.view("error")
-                .modelAttribute("error", e.getMessage())
-                .build())));
+                )
+                .onErrorResume(e -> Mono.just(Rendering.view("error")
+                    .modelAttribute("error", e.getMessage())
+                    .build())));
     }
+
 }

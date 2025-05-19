@@ -8,9 +8,15 @@
 <body>
     <h1>Nuevo Estudiante</h1>
     
-    <form th:action="@{/estudiantes/guardar}" th:object="${estudiante}" method="post">
+    <!-- Cambio importante en la acción del formulario -->
+    <form th:action="@{/estudiantes}" th:object="${estudiante}" method="post">
         <table>
             <tbody>
+                <!-- Mensaje de error (nuevo) -->
+                <tr th:if="${error}">
+                    <td colspan="2" style="color: red;" th:text="${error}"></td>
+                </tr>
+                
                 <tr>
                     <td><label for="nombre">Nombre:</label></td>
                     <td><input type="text" id="nombre" th:field="*{nombre}" required /></td>
