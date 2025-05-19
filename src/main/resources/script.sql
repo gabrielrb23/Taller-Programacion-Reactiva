@@ -25,13 +25,14 @@ CREATE TABLE materia (
 );
 
 CREATE TABLE nota (
+    id SERIAL PRIMARY KEY,
     materia_id INTEGER REFERENCES materia(id),
     estudiante_id INTEGER REFERENCES estudiante(id),
     observacion VARCHAR(200),
     valor NUMERIC(3,2) CHECK (valor >= 0 AND valor <= 5),
-    porcentaje NUMERIC(4,2) CHECK (porcentaje > 0 AND porcentaje <= 100),
-    PRIMARY KEY (materia_id, estudiante_id)
+    porcentaje NUMERIC(4,2) CHECK (porcentaje > 0 AND porcentaje <= 100)
 );
+
 
 -- Conceder permisos al usuario
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO taller_user;
