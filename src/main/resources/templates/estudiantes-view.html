@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Lista de Estudiantes</title>
-    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
     <h1>Lista de Estudiantes</h1>
-    <div>
+    <div th:if="${materiaId != null}">
+        <a th:href="@{/materias}">Volver a Materias</a>
+    </div>
+    <div th:unless="${materiaId != null}">
         <a th:href="@{/estudiantes/nuevo}" class="btn-crear">Crear Nuevo Estudiante</a>
     </div>
+    
     <table>
         <thead>
             <tr>

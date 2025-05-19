@@ -16,7 +16,11 @@ public class EstudianteService {
         return estudianteRepository.findAll();
     }
 
-        public Mono<Estudiante> save(Estudiante estudiante) {
+    public Mono<Estudiante> findById(Long id) {
+        return estudianteRepository.findById(id);
+    }
+    
+    public Mono<Estudiante> save(Estudiante estudiante) {
         return estudianteRepository.findByCorreo(estudiante.getCorreo())
             .flatMap(existing -> {
                 if (existing.getId().equals(estudiante.getId())) {
@@ -28,16 +32,7 @@ public class EstudianteService {
             .switchIfEmpty(estudianteRepository.save(estudiante));
     }
 
-
-    public Mono<Estudiante> findById(Long id) {
-        return estudianteRepository.findById(id);
-    }
-
     public Mono<Void> deleteById(Long id) {
         return estudianteRepository.deleteById(id);
-    }
-
-    public Flux<Estudiante> findByMateriaId(Long materiaId) {
-        return estudianteRepository.findByMateriaId(materiaId);
     }
 }
