@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Estudiantes de la Materia</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+    <h1>Estudiantes inscritos en: <span th:text="${materiaNombre}"></span></h1>
+    
+    <div class="enlaces">
+        <a th:href="@{/materias/view}">Volver a Materias</a>
+        <a th:href="@{/estudiantes/nuevo}">Crear Nuevo Estudiante</a>
+    </div>
+    <div th:if="${estudiantes.empty}">
+        <p>No hay estudiantes inscritos en esta materia aún.</p>
+    </div>
+        <table th:unless="${estudiantes.empty}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="estudiante : ${estudiantes}">
+                <td th:text="${estudiante.id}">1</td>
+                <td th:text="${estudiante.nombre}">Nombre</td>
+                <td th:text="${estudiante.apellido}">Apellido</td>
+                <td th:text="${estudiante.correo}">correo@example.com</td>
+                <td>
+                    <a th:href="@{'/estudiantes/editar/' + ${estudiante.id}}">Editar</a> |
+                    <a th:href="@{'/estudiantes/eliminar/' + ${estudiante.id}}" 
+                       onclick="return confirm('¿Estás seguro de que quieres eliminar este estudiante?');">Eliminar</a> |
+                    <a th:href="@{'/notas/' + ${estudiante.id} + '?materiaId=' + ${materiaId}}">Ver Notas</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

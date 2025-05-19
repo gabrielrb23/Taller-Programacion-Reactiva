@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${modo == 'crear' ? 'Crear Nueva Materia' : 'Editar Materia'}">Formulario Materia</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+    <h1 th:text="${modo == 'crear' ? 'Crear Nueva Materia' : 'Editar Materia'}">Formulario Materia</h1>
+
+    <form th:action="@{/materias/guardar}" th:object="${materia}" method="post">
+        <table>
+            <tbody>
+                <tr th:if="${modo == 'editar'}">
+                    <td colspan="2">
+                        <input type="hidden" th:field="*{id}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="nombre">Nombre:</label></td>
+                    <td>
+                        <input type="text" id="nombre" th:field="*{nombre}" required />
+                        <div class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="creditos">Créditos:</label></td>
+                    <td>
+                        <input type="number" id="creditos" th:field="*{creditos}" min="1" required />
+                        <div class="error" th:if="${#fields.hasErrors('creditos')}" th:errors="*{creditos}"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit">
+                            <span th:text="${modo == 'crear' ? 'Crear' : 'Guardar Cambios'}">Guardar</span>
+                        </button>
+                        <a th:href="@{/materias/view}" style="margin-left: 10px;">Cancelar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</body>
+</html>

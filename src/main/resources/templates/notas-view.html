@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notas del Estudiante</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <h1>Notas del Estudiante</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Materia ID</th>
+                <th>Nota</th>
+                <th>Porcentaje</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="nota : ${notas}">
+                <td th:text="${nota.id}">1</td>
+                <td th:text="${nota.materiaId}">101</td>
+                <td th:text="${nota.valor}">4.5</td>
+                <td th:text="${nota.porcentaje}">30</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a th:href="@{/estudiantes/view}">Volver a Lista de Estudiantes</a>
+</body>
+</html>
