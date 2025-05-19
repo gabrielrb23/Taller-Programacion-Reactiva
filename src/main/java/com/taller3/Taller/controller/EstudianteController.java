@@ -1,27 +1,29 @@
 package com.taller3.Taller.controller;
 
-import com.taller3.Taller.model.Estudiante;
 import com.taller3.Taller.service.EstudianteService;
-import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.result.view.Rendering;
+import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 
-@RestController
-@RequestMapping("/api/estudiantes")
+@Controller
 public class EstudianteController {
+
     private final EstudianteService estudianteService;
 
     public EstudianteController(EstudianteService estudianteService) {
         this.estudianteService = estudianteService;
     }
 
-    @GetMapping
-    public Flux<Estudiante> getAll() {
-        return estudianteService.findAll();
+    @GetMapping("/estudiantes/view")
+    public Mono<Rendering> getEstudiantesPage() {
+        return estudianteService.findAll()
+            .collectList()
+            .map(estudiantes -> Rendering.view("estudiantes-view")
+                .modelAttribute("estudiantes", estudiantes)
+                .build()
+            );
     }
 
-    @PostMapping
-    public Mono<Estudiante> create(@RequestBody Estudiante estudiante) {
-        return estudianteService.save(estudiante);
-    }
 }
